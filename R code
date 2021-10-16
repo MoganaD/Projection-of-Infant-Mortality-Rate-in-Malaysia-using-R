@@ -1,0 +1,191 @@
+1.0	Data Cleaning
+
+> DATASET_ts <- ts(DATASET, start = 1, frequency = 1)
+> head(DATASET_ts)
+
+Time Series:
+Start = 1 
+End = 6 
+Frequency = 1 
+
+     Deaths per 1,000 Live Births
+[1,]                     114.445
+[2,]                     110.138
+[3,]                     105.830
+[4,]                     101.523
+[5,]                      97.216
+[6,]                      92.908
+
+> tail(DATASET_ts)
+
+Time Series:
+Start = 66 
+End = 71 
+Frequency = 1 
+    Deaths per 1000 Live Births
+[1,]                       6.212
+[2,]                       6.108
+[3,]                       6.003
+[4,]                       5.899
+[5,]                       5.750
+
+
+2.0	Descriptive analysis
+
+> summary(DATASET_ts)
+
+ Deaths per 1000 Live Births
+ Min.   :  5.600            
+ 1st Qu.:  7.851            
+ Median : 18.949            
+ Mean   : 32.868            
+ 3rd Qu.: 47.648            
+ Max.   :114.445
+
+ 
+3.0	Time series plot
+
+> estimation95 <- window(DATASET_ts, start = 1, end = 67)
+> estimation95
+Time Series:
+Start = 1 
+End = 67 
+Frequency = 1
+
+> evaluation1 <- window(DATASET_ts, start = 68) 
+> evaluation1
+Time Series:
+Start = 68 
+End = 71 
+Frequency = 1 
+     Deaths per 1000 Live Births
+[1,]                       6.003
+[2,]                       5.899
+[3,]                       5.750
+[4,]                       5.600
+
+> autoplot(DATASET_ts, series = "Original Time Series Plot") + xlab  ("Year") + ylab("Deaths per 1000 Live Births") + theme(legend.position = "bottom")
+
+
+ 
+4.0 Univariate time series modelling
+
+4.1 Mean model
+
+> mean1 <- meanf(estimation95, h=length(evaluation1))
+> summary(mean1)
+Forecast method: Mean
+
+Model Information:
+$mu
+[1] 34.48369
+$mu.se
+[1] 3.814652
+
+$sd
+[1] 31.22427
+
+$bootstrap
+[1] FALSE
+
+$call
+meanf(y = estimation95, h = length(evaluation1))
+
+attr(,"class")
+[1] "meanf"
+
+ 
+   
+ 
+
+ 
+4.2 Naïve Model
+
+> naive1 <- naive(estimation95, h = length(evaluation1))
+> summary(naive1)
+Forecast method: Naive method
+Model Information:
+Call: naive(y = estimation95, h = length(evaluation1)) 
+
+Residual sd: 2.2003 
+
+ 
+
+ 
+
+ 
+4.3 ARIMA model
+
+> arima1 <- auto.arima(estimation95)
+> summary(arima1)
+Series: estimation95 
+ARIMA(0,2,0) 
+
+sigma^2 estimated as 0.05985:  log likelihood=-0.47
+AIC=2.94   AICc=3   BIC=5.11
+
+ 
+ 
+
+ 
+
+
+ 
+4.4 Exponential State Space model
+
+> ets1 <- ets(estimation95)
+> summary(ets1)
+ETS(M,Ad,N) 
+
+
+Call:
+ ets(y = estimation95) 
+
+  Smoothing parameters:
+    alpha = 0.9999 
+    beta  = 0.8341 
+    phi   = 0.9334 
+
+  Initial states:
+    l = 118.837 
+    b = -4.5504 
+
+  sigma:  0.0084
+
+     AIC     AICc      BIC 
+66.75223 68.15223 79.98038 
+
+ 
+
+ 
+
+ 
+4.5 Neural Network Model
+
+> neural1 <- nnetar(estimation95)
+> neural1
+Series: estimation95 
+Model:  NNAR(1,1) 
+Call:   nnetar(y = estimation95)
+
+Average of 20 networks, each of which is a 1-1-1 network with 4 weights options were - linear output units 
+
+sigma^2 estimated as 0.211
+
+>  forecast1_neural <- forecast(neural1, h = length(evaluation1))
+> forecast1_neural
+Point Forecast
+68       6.219745
+69       6.318079
+70       6.404646
+71       6.480882
+
+ 
+
+
+ 
+5.0	Forecasting future values
+
+The followings are examples of syntax and outputs from R programming and RStudio used for forecasting the 3 step-ahead forecast values.
+
+ 
