@@ -1,5 +1,3 @@
-# Projection-of-Infant-Mortality-Rate-in-Malaysia-using-R
-
 Projecting future infant mortality rate (IMR) is an important subject in ensuring the stability of health in one nation or
 a specific region in general. Secondary data of IMR from December 1950 until December 2020 from United NationsWorld Population Prospects were used to project the trend of IMR in Malaysia up to 2023. In this study, five different
 forecasting models were adopted including Mean model, Naïve model, Autoregressive Integrated Moving Average
